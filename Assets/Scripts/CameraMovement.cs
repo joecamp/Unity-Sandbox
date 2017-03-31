@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMovementWithRig : MonoBehaviour {
+public class CameraMovement : MonoBehaviour {
 
 	public float MovementSpeed;
 	public float MovementSensitivity;
@@ -23,6 +23,7 @@ public class CameraMovementWithRig : MonoBehaviour {
 	void LateUpdate () 
 	{
 		MoveCamera ();
+		RotateCamera ();
 		ZoomCamera ();
 	}
 
@@ -64,6 +65,17 @@ public class CameraMovementWithRig : MonoBehaviour {
 
 		transform.position = new Vector3(newPosX, transform.position.y, newPosZ);
 		transform.position = Vector3.Lerp (transform.position, new Vector3 (newPosX, transform.position.y, newPosZ), Time.deltaTime * MovementSensitivity);
+	}
+
+
+	void RotateCamera() 
+	{
+		if (Input.GetKey (KeyCode.Q))
+		{
+			Vector3 additionalRotation = new Vector3 (45f, 0f, 0f); 
+
+			transform.Rotate (additionalRotation);
+		}
 	}
 
 
