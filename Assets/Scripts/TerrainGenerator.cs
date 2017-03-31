@@ -9,7 +9,7 @@ public class TerrainGenerator : MonoBehaviour {
 
 	public GameObject GrassCubePrefab;
 
-	public List<GameObject> TerrainCubes;
+	public TCube[,] TCubes;
 
 	private System.Random rng = new System.Random ();
 	private Vector3 _generatorStartPoint;
@@ -18,6 +18,7 @@ public class TerrainGenerator : MonoBehaviour {
 	void Start () 
 	{
 		_generatorStartPoint = transform.position;
+		TCubes = new TCube[SizeX, SizeZ];
 		GenerateRandomHeightTerrain ();
 	}
 
@@ -32,22 +33,26 @@ public class TerrainGenerator : MonoBehaviour {
 			{
 				// for now, just randomly choose a height.  eventually add heuristics to smooth heights.
 				currentHeight = rng.Next(MinHeight, MaxHeight);
-				AddCube (x, currentHeight, z);
+
+				TCubes [x, z] = new TCube (x, currentHeight, z, 0);
+				DrawTCube(TCubes[x, z]);
 			}
 		}
 	}
+		
 
-
-	void AddCube(int x, int y, int z) 
+	void DrawTCube(TCube cube) 
 	{
-		GameObject newCube = Instantiate (GrassCubePrefab) as GameObject;
-		newCube.transform.SetParent (transform);
-		newCube.name = "GrassCube" + (x + 1) + "." + (z + 1);
+		GameObject newCube;
 
-		Vector3 newPosition = new Vector3 (GrassCubePrefab.transform.localScale.x * x, GrassCubePrefab.transform.localScale.y * y, GrassCubePrefab.transform.localScale.z * z);
+		if (cube.Type == 0)
+		{
+			newCube = Instantiate (GrassCubePrefab) as GameObject;
+			newCube.name = "GrassCube" + cube.X + ". " + cube.Y + "." + cube.Z;
+			newCube.transform.SetParent (transform);
+			Vector3 newPosition = new Vector3 (GrassCubePrefab.transform.localScale.x * cube.X, GrassCubePrefab.transform.localScale.y * cube.Y, GrassCubePrefab.transform.localScale.z * cube.Z);
 
-		newCube.transform.localPosition = newPosition;
-
-		TerrainCubes.Add (newCube);
+			newCube.transform.localPosition = newPosition;
+		}
 	}
 }
