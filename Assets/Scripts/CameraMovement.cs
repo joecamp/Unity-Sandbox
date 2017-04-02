@@ -36,18 +36,6 @@ public class CameraMovement : MonoBehaviour {
 		transform.position = targetCamPos;
 	}
 
-
-	void RotateCamera() 
-	{
-		if (Input.GetKey (KeyCode.Q))
-		{
-			Vector3 additionalRotation = new Vector3 (45f, 0f, 0f); 
-
-			transform.Rotate (additionalRotation);
-		}
-	}
-
-
 	void ZoomCamera() 
 	{
 		_zoom -= Input.GetAxis ("Mouse ScrollWheel") * ZoomSensitivity;
