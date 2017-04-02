@@ -4,21 +4,23 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
 
-	public float MovementSpeed;
-	public float MovementSensitivity;
 	public float ZoomSpeed;
 	public float ZoomSensitivity;
 	public float MaxZoom;
 	public float MinZoom;
+	public Transform CameraRig;
+	public float RotationTime;
+
 
 	private float _zoom;
+	private Vector3 _offset;
 
 
 	void Start()
 	{
 		_zoom = Camera.main.orthographicSize;
+		_offset = transform.position - CameraRig.position;
 	}
-
 
 	void LateUpdate () 
 	{
@@ -28,43 +30,10 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 
-	void MoveCamera() 
+	void MoveCamera()
 	{
-		float movementX = 0;
-		float movementZ = 0;
-
-		if (Input.GetKey (KeyCode.A))
-		{
-			movementX -= MovementSpeed;
-			movementZ -= MovementSpeed;
-		}
-		if (Input.GetKey (KeyCode.S))
-		{
-			movementX += MovementSpeed;
-			movementZ -= MovementSpeed;
-		}
-		if (Input.GetKey (KeyCode.D))
-		{
-			movementX += MovementSpeed;
-			movementZ += MovementSpeed;
-		}
-		if (Input.GetKey (KeyCode.W))
-		{
-			movementX -= MovementSpeed;
-			movementZ += MovementSpeed;
-		}
-
-		movementX = Mathf.Clamp (movementX, -MovementSpeed, MovementSpeed);
-		movementZ = Mathf.Clamp (movementZ, -MovementSpeed, MovementSpeed);
-
-		movementX *= Time.deltaTime;
-		movementZ *= Time.deltaTime;
-
-		float newPosX = transform.position.x + movementX;
-		float newPosZ = transform.position.z + movementZ;
-
-		transform.position = new Vector3(newPosX, transform.position.y, newPosZ);
-		transform.position = Vector3.Lerp (transform.position, new Vector3 (newPosX, transform.position.y, newPosZ), Time.deltaTime * MovementSensitivity);
+		Vector3 targetCamPos = CameraRig.position + _offset;
+		transform.position = targetCamPos;
 	}
 
 
@@ -85,5 +54,48 @@ public class CameraMovement : MonoBehaviour {
 		_zoom = Mathf.Clamp (_zoom, MinZoom, MaxZoom);
 
 		Camera.main.orthographicSize = Mathf.Lerp (Camera.main.orthographicSize, _zoom, Time.deltaTime * ZoomSpeed);
+	}
+
+	void RotateCamera()
+	{
+		if (Input.GetKeyDown (KeyCode.Q)) 
+		{
+			float rotationAngle = 45f;
+			StartCoroutine (Rotate (rotationAngle));
+		}
+		if (Input.GetKeyDown (KeyCode.E)) 
+		{
+			float rotationAngle = -45f;
+			StartCoroutine (Rotate (rotationAngle));
+		}
+	}
+
+	IEnumerator Rotate(float rotationAngle)
+	{
+		float percentRotated = 0f;
+		float percentToRotate = Time.deltaTime / RotationTime;
+
+		while (percentRotated <= 1f) 
+		{
+			// Set amount to rotate this frame
+			float degreesToRotate = rotationAngle * percentToRotate;
+
+			// Check if rotation will overshoot the rotationAngle and adjust accordingly
+			if (percentRotated + degreesToRotate/rotationAngle > 1f) 
+			{
+				percentToRotate = 1f - percentRotated;
+				degreesToRotate = percentToRotate * rotationAngle;
+			}
+
+			// Perform rotation
+			_offset = Quaternion.AngleAxis (degreesToRotate, Vector3.up) * _offset;
+			transform.position = CameraRig.position + _offset; 
+			transform.LookAt(CameraRig.position);
+			_offset = transform.position - CameraRig.position;
+
+			// Increment the percentage rotated thus far
+			percentRotated += degreesToRotate/rotationAngle;
+			yield return null;
+		}
 	}
 }
