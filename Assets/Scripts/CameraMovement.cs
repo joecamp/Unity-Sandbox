@@ -4,37 +4,37 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
 
+	[Header("Camera Settings")]
 	public float ZoomSpeed;
 	public float ZoomSensitivity;
 	public float MaxZoom;
 	public float MinZoom;
-	public Transform CameraRig;
+	public float RotationDegrees;
 	public float RotationTime;
 
+	[Header("Input Settings")]
+	public KeyCode RotateLeftKey;
+	public KeyCode RotateRightKey;
 
+	private Transform _cameraRig;
 	private float _zoom;
 	private Vector3 _offset;
 
 
 	void Start()
 	{
+		_cameraRig = transform.parent;
 		_zoom = Camera.main.orthographicSize;
-		_offset = transform.position - CameraRig.position;
+		_offset = transform.position - _cameraRig.position;
 	}
+
 
 	void LateUpdate () 
 	{
-		MoveCamera ();
 		RotateCamera ();
 		ZoomCamera ();
 	}
 
-
-	void MoveCamera()
-	{
-		Vector3 targetCamPos = CameraRig.position + _offset;
-		transform.position = targetCamPos;
-	}
 
 	void ZoomCamera() 
 	{
@@ -44,19 +44,19 @@ public class CameraMovement : MonoBehaviour {
 		Camera.main.orthographicSize = Mathf.Lerp (Camera.main.orthographicSize, _zoom, Time.deltaTime * ZoomSpeed);
 	}
 
+
 	void RotateCamera()
 	{
-		if (Input.GetKeyDown (KeyCode.Q)) 
+		if (Input.GetKeyDown (RotateLeftKey)) 
 		{
-			float rotationAngle = 45f;
-			StartCoroutine (Rotate (rotationAngle));
+			StartCoroutine (Rotate (RotationDegrees));
 		}
-		if (Input.GetKeyDown (KeyCode.E)) 
+		if (Input.GetKeyDown (RotateRightKey)) 
 		{
-			float rotationAngle = -45f;
-			StartCoroutine (Rotate (rotationAngle));
+			StartCoroutine (Rotate (-RotationDegrees));
 		}
 	}
+
 
 	IEnumerator Rotate(float rotationAngle)
 	{
@@ -77,9 +77,9 @@ public class CameraMovement : MonoBehaviour {
 
 			// Perform rotation
 			_offset = Quaternion.AngleAxis (degreesToRotate, Vector3.up) * _offset;
-			transform.position = CameraRig.position + _offset; 
-			transform.LookAt(CameraRig.position);
-			_offset = transform.position - CameraRig.position;
+			transform.position = _cameraRig.position + _offset; 
+			transform.LookAt(_cameraRig.position);
+			_offset = transform.position - _cameraRig.position;
 
 			// Increment the percentage rotated thus far
 			percentRotated += degreesToRotate/rotationAngle;

@@ -2,14 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TerrainGenerator : MonoBehaviour {
+// initial environment generation happens here.  Also storing ECubes matrix (could this go somewhere else?  not sure.)  Need to keep
+// matrix updated as changes to the environment occur.  should switch to 3D array before things get too messy
 
-	public int SizeX, SizeZ;
-	public int MinHeight, MaxHeight;
+public class EnvironmentGenerator : MonoBehaviour {
 
+	[Header("Map Settings")]
+	public int SizeX;
+	public int SizeZ;
+	public int MinHeight;
+	public int MaxHeight;
+
+	[Header("Cube Prefabs")]
 	public GameObject GrassCubePrefab;
 
-	public TCube[,] TCubes;
+	public ECube[,] ECubes;
+	public List<GameObject> Cubes;
 
 	private System.Random rng = new System.Random ();
 	private Vector3 _generatorStartPoint;
@@ -18,7 +26,8 @@ public class TerrainGenerator : MonoBehaviour {
 	void Start () 
 	{
 		_generatorStartPoint = transform.position;
-		TCubes = new TCube[SizeX, SizeZ];
+		ECubes = new ECube[SizeX, SizeZ];
+		Cubes = new List<GameObject> ();
 		GenerateRandomHeightTerrain ();
 	}
 
@@ -34,25 +43,27 @@ public class TerrainGenerator : MonoBehaviour {
 				// for now, just randomly choose a height.  eventually add heuristics to smooth heights.
 				currentHeight = rng.Next(MinHeight, MaxHeight);
 
-				TCubes [x, z] = new TCube (x, currentHeight, z, 0);
-				DrawTCube(TCubes[x, z]);
+				ECubes [x, z] = new ECube (x, currentHeight, z, 0);
+				DrawECube(ECubes[x, z]);
 			}
 		}
 	}
-		
 
-	void DrawTCube(TCube cube) 
+
+	void DrawECube(ECube cube) 
 	{
 		GameObject newCube;
 
 		if (cube.Type == 0)
 		{
 			newCube = Instantiate (GrassCubePrefab) as GameObject;
-			newCube.name = "GrassCube" + cube.X + ". " + cube.Y + "." + cube.Z;
+			//newCube.name = "GrassCube" + cube.X + ". " + cube.Y + "." + cube.Z;
 			newCube.transform.SetParent (transform);
 			Vector3 newPosition = new Vector3 (GrassCubePrefab.transform.localScale.x * cube.X, GrassCubePrefab.transform.localScale.y * cube.Y, GrassCubePrefab.transform.localScale.z * cube.Z);
 
 			newCube.transform.localPosition = newPosition;
+
+			Cubes.Add (newCube);
 		}
 	}
 }

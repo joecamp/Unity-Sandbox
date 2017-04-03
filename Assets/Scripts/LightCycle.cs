@@ -49,5 +49,4 @@ public class LightCycle : MonoBehaviour {
 
 		Sun.intensity = _initialIntensity * intensityMultiplier;
 	}
-		
 }
