@@ -7,14 +7,13 @@ using UnityEngine;
 
 public class EnvironmentGenerator : MonoBehaviour {
 
+	public GameObject[] CubePrefabs;
+
 	[Header("Map Settings")]
 	public int SizeX;
 	public int SizeZ;
 	public int MinHeight;
 	public int MaxHeight;
-
-	[Header("Cube Prefabs")]
-	public GameObject GrassCubePrefab;
 
 	public ECube[,] ECubes;
 	public List<GameObject> Cubes;
@@ -43,7 +42,7 @@ public class EnvironmentGenerator : MonoBehaviour {
 				// for now, just randomly choose a height.  eventually add heuristics to smooth heights.
 				currentHeight = rng.Next(MinHeight, MaxHeight);
 
-				ECubes [x, z] = new ECube (x, currentHeight, z, 0);
+				ECubes [x, z] = new ECube (x, currentHeight, z, rng.Next(0, CubePrefabs.Length));
 				DrawECube(ECubes[x, z]);
 			}
 		}
@@ -54,16 +53,12 @@ public class EnvironmentGenerator : MonoBehaviour {
 	{
 		GameObject newCube;
 
-		if (cube.Type == 0)
-		{
-			newCube = Instantiate (GrassCubePrefab) as GameObject;
-			//newCube.name = "GrassCube" + cube.X + ". " + cube.Y + "." + cube.Z;
-			newCube.transform.SetParent (transform);
-			Vector3 newPosition = new Vector3 (GrassCubePrefab.transform.localScale.x * cube.X, GrassCubePrefab.transform.localScale.y * cube.Y, GrassCubePrefab.transform.localScale.z * cube.Z);
+		newCube = Instantiate (CubePrefabs[cube.Type]) as GameObject;
 
-			newCube.transform.localPosition = newPosition;
+		newCube.transform.SetParent (transform);
+		Vector3 newPosition = new Vector3 (CubePrefabs[cube.Type].transform.localScale.x * cube.X, CubePrefabs[cube.Type].transform.localScale.y * cube.Y, CubePrefabs[cube.Type].transform.localScale.z * cube.Z);
+		newCube.transform.localPosition = newPosition;
 
-			Cubes.Add (newCube);
-		}
+		Cubes.Add (newCube);
 	}
 }

@@ -1151,12 +1151,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a91dacb65db95f4ebe495166605b1a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CubePrefabs:
+  - {fileID: 1882044718031766, guid: b64ac850f9988944d936774327259147, type: 2}
+  - {fileID: 1208673717356392, guid: 51153490a339195498bb42f7fcd2e11b, type: 2}
+  - {fileID: 1137089569761982, guid: 2c93b62c4d3342e49bd2f6ac68682682, type: 2}
   SizeX: 30
   SizeZ: 30
   MinHeight: 0
   MaxHeight: 5
-  GrassCubePrefab: {fileID: 1882044718031766, guid: b64ac850f9988944d936774327259147,
-    type: 2}
   Cubes: []
 --- !u!1 &1757127885
 GameObject:
