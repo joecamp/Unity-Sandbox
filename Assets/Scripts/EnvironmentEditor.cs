@@ -11,8 +11,10 @@ public class EnvironmentEditor : MonoBehaviour {
 	[Header("Input Settings")]
 	public KeyCode ElevateAllBlocksKey;
 	public KeyCode DepressAllBlocksKey;
+	public KeyCode RegenMapKey;
 
 	[Header("References")]
+	public EnvironmentGenerator EnvironmentGenerator;
 	public EnvironmentUtilities EnvironmentUtilities;
 	public ToggleGroup TerrainToggleGroup;
 
@@ -56,6 +58,10 @@ public class EnvironmentEditor : MonoBehaviour {
 		{
 			EnvironmentUtilities.MoveAllCubesByDistance (-1);
 		}
+		if (Input.GetKeyDown (RegenMapKey))
+		{
+			EnvironmentGenerator.RegenMapAttempt1 ();
+		}
 	}
 
 
@@ -68,8 +74,6 @@ public class EnvironmentEditor : MonoBehaviour {
 			if (hit.collider.gameObject.tag == "Environmental Cube")
 			{
 				GameObject hitCube = hit.collider.gameObject;
-				//print(EnvironmentGenerator.ECubes[(int)hitCube.transform.position.x, (int)hitCube.transform.position.z]);
-				//EnvironmentUtilities.HighlightCube (hitCube);
 
 				if (_elevateToggle)
 				{

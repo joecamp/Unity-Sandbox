@@ -7,7 +7,22 @@ public class CameraRigMovement : MonoBehaviour {
 	[Header("Rig Settings")]
 	public float RigSpeed = 6f;
 
+	[Header("References")]
+	public EnvironmentGenerator EnvironmentGenerator;
+
 	private Vector3 _movement;
+
+
+	void Start() 
+	{
+		Vector3 startPosition = new Vector3(
+			EnvironmentGenerator.SizeX / 2f,
+			0,
+			EnvironmentGenerator.SizeZ / 2f
+		);
+
+		transform.position = startPosition;
+	}
 
 
 	void LateUpdate () {

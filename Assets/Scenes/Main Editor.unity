@@ -220,7 +220,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 7
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -362,6 +362,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RigSpeed: 6
+  EnvironmentGenerator: {fileID: 1687094855}
 --- !u!4 &210555335
 Transform:
   m_ObjectHideFlags: 0
@@ -693,6 +694,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ElevateAllBlocksKey: 110
   DepressAllBlocksKey: 109
+  RegenMapKey: 32
+  EnvironmentGenerator: {fileID: 1687094855}
   EnvironmentUtilities: {fileID: 1687094854}
   TerrainToggleGroup: {fileID: 1269357330}
 --- !u!1 &1250606954
@@ -1157,14 +1160,14 @@ MonoBehaviour:
   - {fileID: 1882044718031766, guid: b64ac850f9988944d936774327259147, type: 2}
   - {fileID: 1208673717356392, guid: 51153490a339195498bb42f7fcd2e11b, type: 2}
   - {fileID: 1137089569761982, guid: 2c93b62c4d3342e49bd2f6ac68682682, type: 2}
-  CubeProbabilities:
-  - 0.8
-  - 0.1
-  - 0.1
   SizeX: 30
   SizeZ: 30
   MinHeight: -5
   MaxHeight: 5
+  CubeProbabilities:
+  - 0.6
+  - 0
+  - 0.4
   GenTypeNearPercent: 0.4
   GenStepDelay: 0
   Cubes: []

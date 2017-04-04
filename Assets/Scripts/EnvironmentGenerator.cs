@@ -8,8 +8,6 @@ using UnityEngine;
 public class EnvironmentGenerator : MonoBehaviour {
 
 	public GameObject[] CubePrefabs;
-	[Range(0.0f, 1.0f)]
-	public float[] CubeProbabilities;
 
 	[Header("Map Settings")]
 	public int SizeX;
@@ -18,6 +16,8 @@ public class EnvironmentGenerator : MonoBehaviour {
 	public int MaxHeight;
 
 	[Header("Generation Settings")]
+	[Range(0.0f, 1.0f)]
+	public float[] CubeProbabilities;
 	[Range(0.0f, 1.0f)]
 	public float GenTypeNearPercent;
 	public float GenStepDelay;
@@ -34,8 +34,17 @@ public class EnvironmentGenerator : MonoBehaviour {
 		_generatorStartPoint = transform.position;
 		ECubes = new ECube[SizeX, SizeZ];
 		Cubes = new List<GameObject> ();
-		//GenerateRandomHeightTerrain ();
+
 		GenerateFlatTerrain();
+		SetIsolatedCubesToDefault ();
+		DrawCubes ();
+	}
+
+
+	public void RegenMapAttempt1() 
+	{
+		CleanUp ();
+		GenerateFlatTerrain ();
 		SetIsolatedCubesToDefault ();
 		DrawCubes ();
 	}
@@ -61,13 +70,11 @@ public class EnvironmentGenerator : MonoBehaviour {
 
 	void GenerateFlatTerrain()
 	{
-		int currentHeight = 0;
-
 		for (int x = (int)_generatorStartPoint.x; x < SizeX; x++)
 		{
 			for (int z = (int)_generatorStartPoint.z; z < SizeZ; z++)
 			{
-				ECubes [x, z] = new ECube (x, currentHeight, z, GetTypeBasedOnProbability());
+				ECubes [x, z] = new ECube (x, 0, z, GetTypeBasedOnProbability());
 			}
 		}
 	}
@@ -144,5 +151,14 @@ public class EnvironmentGenerator : MonoBehaviour {
 		newCube.transform.localPosition = newPosition;
 
 		Cubes.Add (newCube);
+	}
+
+
+	void CleanUp() 
+	{
+		for (int i = 0; i < Cubes.Count; i++)
+		{
+			GameObject.Destroy (Cubes [i]);
+		}
 	}
 }
