@@ -8,12 +8,19 @@ using UnityEngine;
 public class EnvironmentGenerator : MonoBehaviour {
 
 	public GameObject[] CubePrefabs;
+	[Range(0.0f, 1.0f)]
+	public float[] CubeProbabilities;
 
 	[Header("Map Settings")]
 	public int SizeX;
 	public int SizeZ;
 	public int MinHeight;
 	public int MaxHeight;
+
+	[Header("Generation Settings")]
+	[Range(0.0f, 1.0f)]
+	public float GenTypeNearPercent;
+	public float GenStepDelay;
 
 	public ECube[,] ECubes;
 	public List<GameObject> Cubes;
@@ -27,7 +34,10 @@ public class EnvironmentGenerator : MonoBehaviour {
 		_generatorStartPoint = transform.position;
 		ECubes = new ECube[SizeX, SizeZ];
 		Cubes = new List<GameObject> ();
-		GenerateRandomHeightTerrain ();
+		//GenerateRandomHeightTerrain ();
+		GenerateFlatTerrain();
+		SetIsolatedCubesToDefault ();
+		DrawCubes ();
 	}
 
 
@@ -44,6 +54,80 @@ public class EnvironmentGenerator : MonoBehaviour {
 
 				ECubes [x, z] = new ECube (x, currentHeight, z, rng.Next(0, CubePrefabs.Length));
 				DrawECube(ECubes[x, z]);
+			}
+		}
+	}
+
+
+	void GenerateFlatTerrain()
+	{
+		int currentHeight = 0;
+
+		for (int x = (int)_generatorStartPoint.x; x < SizeX; x++)
+		{
+			for (int z = (int)_generatorStartPoint.z; z < SizeZ; z++)
+			{
+				ECubes [x, z] = new ECube (x, currentHeight, z, GetTypeBasedOnProbability());
+			}
+		}
+	}
+
+
+	int GetTypeBasedOnProbability() 
+	{
+		float randomPercent = Random.Range(0.0f, 1.0f);
+		float runningTotalPercent = 0f;
+
+		for (int i = 0; i < CubeProbabilities.Length; i++)
+		{
+			if (randomPercent > (1 - (CubeProbabilities [i] + runningTotalPercent)))
+			{
+				return i;
+			}
+
+			runningTotalPercent += CubeProbabilities [i];
+		}
+
+		return 0;
+	}
+		
+
+	void SetIsolatedCubesToDefault() 
+	{
+		for (int x = 0; x < SizeX; x++)
+		{
+			for (int z = 0; z < SizeZ; z++)
+			{
+				if (((x - 1) > 0) && ECubes [x - 1, z].Type == ECubes [x, z].Type)
+				{
+					continue;
+				}
+				if (((x + 1) < SizeX) && ECubes [x + 1, z].Type == ECubes [x, z].Type)
+				{
+					continue;
+				}
+				if (((z + 1) < SizeZ) && ECubes [x, z + 1].Type == ECubes [x, z].Type)
+				{
+					continue;
+				}
+				if (((z - 1) > 0) && ECubes [x, z - 1].Type == ECubes [x, z].Type)
+				{
+					continue;
+				}
+
+				ECubes [x, z].Type = 0;
+			}
+		}
+	}
+
+
+	void DrawCubes()
+	{
+		for (int x = 0; x < SizeX; x++)
+		{
+			for (int z = 0; z < SizeZ; z++)
+			{
+				DrawECube (ECubes [x, z]);
 			}
 		}
 	}

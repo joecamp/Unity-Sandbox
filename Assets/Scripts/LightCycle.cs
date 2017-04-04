@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class LightCycle : MonoBehaviour {
 
-	public Light Sun;
+	[Header("Sun Settings")]
 	public float SecondsInDay;
 	[Range(0,1)]
 	public float TimeOfDay;
+
+	[Header("References")]
+	public Light Sun;
 
 	private float _initialIntensity;
 

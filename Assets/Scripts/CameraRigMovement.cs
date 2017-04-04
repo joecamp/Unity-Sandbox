@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CameraRigMovement : MonoBehaviour {
 
+	[Header("Rig Settings")]
 	public float RigSpeed = 6f;
 
 	private Vector3 _movement;

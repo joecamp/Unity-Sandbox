@@ -8,12 +8,17 @@ using UnityEngine;
 
 public class EnvironmentEditor : MonoBehaviour {
 
+	[Header("Input Settings")]
+	public KeyCode ElevateAllBlocksKey;
+	public KeyCode DepressAllBlocksKey;
+
+	[Header("References")]
 	public EnvironmentUtilities EnvironmentUtilities;
 	public ToggleGroup TerrainToggleGroup;
 
 	private bool _elevateToggle = false;
 	private bool _depressToggle = false;
-	// make this an arraylist once you implement bigger selector sizes 
+	// make this an arraylist once we implement bigger selector sizes 
 	private GameObject _hoveredOverObject;
 
 
@@ -36,21 +41,18 @@ public class EnvironmentEditor : MonoBehaviour {
 		{
 			HandleMouseInput ();
 		} 
-		else if (!EventSystem.current.IsPointerOverGameObject () && TerrainToggleGroup.AnyTogglesOn ())
+		// Toggle on; not over UI
+		else if (TerrainToggleGroup.AnyTogglesOn () && !EventSystem.current.IsPointerOverGameObject ())
 		{
 			HandleHoverOverObject ();
 		} 
-		else if (!TerrainToggleGroup.AnyTogglesOn () && _hoveredOverObject != null)
-		{
-			EnvironmentUtilities.UnHighlightCube (_hoveredOverObject);
-			_hoveredOverObject = null;
-		}
 
-		if (Input.GetKeyDown (KeyCode.N))
+
+		if (Input.GetKeyDown (ElevateAllBlocksKey))
 		{
 			EnvironmentUtilities.MoveAllCubesByDistance (1);
 		}
-		if (Input.GetKeyDown (KeyCode.M))
+		if (Input.GetKeyDown (DepressAllBlocksKey))
 		{
 			EnvironmentUtilities.MoveAllCubesByDistance (-1);
 		}
@@ -105,7 +107,12 @@ public class EnvironmentEditor : MonoBehaviour {
 				_hoveredOverObject = hitCube;
 
 				EnvironmentUtilities.HighlightCube (hitCube);
-			}
+			} 
+		} 
+		else if (_hoveredOverObject)
+		{
+			EnvironmentUtilities.UnHighlightCube (_hoveredOverObject);
+			_hoveredOverObject = null;
 		}
 	}
 }

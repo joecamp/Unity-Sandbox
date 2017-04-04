@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 210030675}
   - component: {fileID: 210030674}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Terrain Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -520,9 +520,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32771b91e7b22fc41b9ec1122bbacb25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sun: {fileID: 409955998}
   SecondsInDay: 1080
   TimeOfDay: 0.35
+  Sun: {fileID: 409955998}
 --- !u!1 &649137000
 GameObject:
   m_ObjectHideFlags: 0
@@ -691,6 +691,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 356000c7ba80cd648b7e4303676b09da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ElevateAllBlocksKey: 110
+  DepressAllBlocksKey: 109
   EnvironmentUtilities: {fileID: 1687094854}
   TerrainToggleGroup: {fileID: 1269357330}
 --- !u!1 &1250606954
@@ -1138,7 +1140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CubeMoveSpeed: 20
-  HighlightColor: {r: 1, g: 0, b: 0, a: 0}
+  HighlightColor: {r: 0, g: 1, b: 1, a: 0}
   EnvironmentGenerator: {fileID: 1687094855}
 --- !u!114 &1687094855
 MonoBehaviour:
@@ -1155,10 +1157,16 @@ MonoBehaviour:
   - {fileID: 1882044718031766, guid: b64ac850f9988944d936774327259147, type: 2}
   - {fileID: 1208673717356392, guid: 51153490a339195498bb42f7fcd2e11b, type: 2}
   - {fileID: 1137089569761982, guid: 2c93b62c4d3342e49bd2f6ac68682682, type: 2}
+  CubeProbabilities:
+  - 0.8
+  - 0.1
+  - 0.1
   SizeX: 30
   SizeZ: 30
-  MinHeight: 0
+  MinHeight: -5
   MaxHeight: 5
+  GenTypeNearPercent: 0.4
+  GenStepDelay: 0
   Cubes: []
 --- !u!1 &1757127885
 GameObject:

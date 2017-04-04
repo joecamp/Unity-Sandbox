@@ -1,15 +1,14 @@
 ﻿public class ECube {
 
-	private int _type;
 	private int _x, _y, _z;
-
+	private int _type;
 
 	public ECube(int x, int y, int z, int type) 
 	{
-		this._x = x;
-		this._y = y;
-		this._z = z;
-		this._type = type;
+		_x = x;
+		_y = y;
+		_z = z;
+		_type = type;
 	}
 
 	public int X
@@ -19,7 +18,7 @@
 		}
 
 		set {
-			X = this._x;
+			_x = value;
 		}
 	}
 
@@ -31,7 +30,7 @@
 		}
 
 		set {
-			Y = this._y;
+			_y = value;
 		}
 	}
 
@@ -43,7 +42,7 @@
 		}
 
 		set {
-			Z = this._z;
+			_z = value;
 		}
 	}
 
@@ -55,7 +54,7 @@
 		}
 
 		set {
-			Type = this._type;
+			_type = value;
 		}
 	}
 }
